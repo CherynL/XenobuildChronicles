@@ -6,28 +6,40 @@ from app.constants import (
 )
 
 parts = ['Head', 'Torso', 'Arm', 'Leg', 'Foot']
-def build_ui(character, weapon, equips, p_defs, e_defs, weights):
+def build_ui(loadout):
 
     weapon_stats = []
     weapon_gems = []; weapon_ranks = []; weapon_values = []
     comboboxes = []
     gems = []; ranks = []; values = []
-    # Starting the Window
+    p_defs = []; e_defs = []; weights = []
+
+    # -----------
+    # WINDOW ROOT
+    # -----------
+
     root = tk.Tk()
     root.title("Xenobuild Chronicles")
-    # Character Dropdown
+    
+    # ---------------
+    # CHARACTER FRAME
+    # ---------------
+
     character_frame = tk.Frame(root, borderwidth=5,relief='groove')
     character_frame.grid(row=0, column=0, sticky="W")
     ttk.Label(character_frame, text="Character").grid(row=0, column=0, padx=5, pady=5)
-    character.name = ttk.Combobox(character_frame, values=characters,state='readonly',width=8)
-    character.name.set("Select...")
-    character.name.grid(row=0, column=1, padx=5, pady=5)
+    loadout.character.name = ttk.Combobox(character_frame, values=characters,state='readonly',width=8)
+    loadout.character.name.set("Select...")
+    loadout.character.name.grid(row=0, column=1, padx=5, pady=5)
     # Level Dropdown
     ttk.Label(character_frame, text="Lv").grid(row=0, column=2, padx=5, pady=5)
-    character.level = ttk.Combobox(character_frame, values=[],state='readonly',width=3)
-    character.level.grid(row=0, column=3, padx=5, pady=5)
+    loadout.character.level = ttk.Combobox(character_frame, values=[],state='readonly',width=3)
+    loadout.character.level.grid(row=0, column=3, padx=5, pady=5)
 
-    # Equipment Frame
+    # ---------------
+    # EQUIPMENT FRAME
+    # ---------------
+
     equips_frame = tk.Frame(root,borderwidth=5,relief='groove')
     equips_frame.grid(row=1, column=0)
 
@@ -40,21 +52,18 @@ def build_ui(character, weapon, equips, p_defs, e_defs, weights):
 
     # weapons Dropdown
     ttk.Label(equips_frame, text='Weapon').grid(row=1, column=0, padx=5, pady=5)
-    weapon.combobox = ttk.Combobox(equips_frame, state='readonly',width=18)
-    weapon.combobox.grid(row=1, column=1, padx=5, pady=5)
+    loadout.weapon.combobox = ttk.Combobox(equips_frame, state='readonly',width=18)
+    loadout.weapon.combobox.grid(row=1, column=1, padx=5, pady=5)
 
     # Misc_Flag Frame
     misc_flag_frame = tk.Frame(equips_frame)
     misc_flag_frame.grid(row=2,column=0,rowspan=2,columnspan=2, sticky='W')
     ttk.Label(misc_flag_frame, text='Anti-Mechon').grid(row=0,column=0, padx=5, pady=5)
     ttk.Label(misc_flag_frame, text='Unshackled').grid(row=1,column=0, padx=5, pady=5)
-    weapon.anti_mechon = ttk.Label(misc_flag_frame, text='Y/N')
-    weapon.anti_mechon.grid(row=0,column=1, padx=5, pady=5)
-    weapon.unshackled = ttk.Label(misc_flag_frame, text='Y/N')
-    weapon.unshackled.grid(row=1,column=1, padx=5, pady=5)
-
-    # weapon Stats
-
+    loadout.weapon.anti_mechon = ttk.Label(misc_flag_frame, text='Y/N')
+    loadout.weapon.anti_mechon.grid(row=0,column=1, padx=5, pady=5)
+    loadout.weapon.unshackled = ttk.Label(misc_flag_frame, text='Y/N')
+    loadout.weapon.unshackled.grid(row=1,column=1, padx=5, pady=5)
 
     # weapon Gems
     for i in range(3):
@@ -71,9 +80,9 @@ def build_ui(character, weapon, equips, p_defs, e_defs, weights):
         value.grid(row=i+1, column=GS+2, padx=5, pady=5)
         weapon_values.append((value))
 
-    weapon.gem0.combobox, weapon.gem1.combobox, weapon.gem2.combobox = [w for w in weapon_gems]
-    weapon.gem0.rank, weapon.gem1.rank, weapon.gem2.rank = [w for w in weapon_ranks]
-    weapon.gem0.value, weapon.gem1.value, weapon.gem2.value = [w for w in weapon_values]
+    loadout.weapon.gem0.combobox, loadout.weapon.gem1.combobox, loadout.weapon.gem2.combobox = [w for w in weapon_gems]
+    loadout.weapon.gem0.rank, loadout.weapon.gem1.rank, loadout.weapon.gem2.rank = [w for w in weapon_ranks]
+    loadout.weapon.gem0.value, loadout.weapon.gem1.value, loadout.weapon.gem2.value = [w for w in weapon_values]
 
 
     weapon_display = enumerate(['Min', 'Max', 'Crit','P Def', 'E Def', 'Block'])
@@ -85,7 +94,7 @@ def build_ui(character, weapon, equips, p_defs, e_defs, weights):
         stat.grid(row=i//3*2+1, column=PD+(i%3), padx=5, pady=5)
         weapon_stats.append((stat))
 
-    weapon.dmg_min, weapon.dmg_max, weapon.crit, weapon.p_def, weapon.e_def, weapon.block = [w for w in weapon_stats]
+    loadout.weapon.dmg_min, loadout.weapon.dmg_max, loadout.weapon.crit, loadout.weapon.p_def, loadout.weapon.e_def, loadout.weapon.block = [w for w in weapon_stats]
 
     ttk.Separator(equips_frame,orient='horizontal').grid(row=WP-1,column=0,columnspan=8,sticky='ew',padx=5,pady=5)
 
@@ -99,7 +108,6 @@ def build_ui(character, weapon, equips, p_defs, e_defs, weights):
 
     # Each Equipment Piece
     for i, part in enumerate(parts):
-        # Label for each section (e.g., "Head", "Torso")
         equip = ttk.Label(equips_frame, text=part)
         equip.grid(row=i+WP+1, column=0, padx=5, pady=5)
         # Combobox for each Part
@@ -132,7 +140,7 @@ def build_ui(character, weapon, equips, p_defs, e_defs, weights):
         weight.grid(row=i+WP+1, column=PD+2, padx=5, pady=5)
         weights.append((weight))
 
-    for eq, c, g, r, v, pd, ed, wt in zip(equips, comboboxes, gems, ranks, values, p_defs, e_defs, weights):
+    for eq, c, g, r, v, pd, ed, wt in zip(loadout.equips, comboboxes, gems, ranks, values, p_defs, e_defs, weights):
         eq.combobox = c
         eq.gem.combobox = g
         eq.gem.rank = r
@@ -141,26 +149,26 @@ def build_ui(character, weapon, equips, p_defs, e_defs, weights):
         eq.e_def = ed
         eq.weight = wt
 
-    # ---------------
-    # Character Stats
-    # ---------------
+    # ----------
+    # STAT FRAME
+    # ----------
 
     stat_frame = tk.Frame(root, borderwidth=5, relief='groove')
-    stat_frame.grid(row=0, column=1,rowspan=2,padx=5,pady=5)
+    stat_frame.grid(row=0, column=1,rowspan=2,padx=5,pady=5,sticky="N")
 
     ttk.Label(stat_frame,text="HP").grid(row=0,column=0,padx=5,pady=5)
     ttk.Label(stat_frame,text="Strength").grid(row=1,column=0,padx=5,pady=5)
     ttk.Label(stat_frame,text="Ether").grid(row=2,column=0,padx=5,pady=5)
     ttk.Label(stat_frame,text="Agility").grid(row=3,column=0,padx=5,pady=5)
 
-    character.hp = ttk.Label(stat_frame,text="–")
-    character.hp.grid(row=0,column=1,padx=5,pady=5)
-    character.strength = ttk.Label(stat_frame,text="–")
-    character.strength.grid(row=1,column=1,padx=5,pady=5)
-    character.ether = ttk.Label(stat_frame,text="–")
-    character.ether.grid(row=2,column=1,padx=5,pady=5)
-    character.agility = ttk.Label(stat_frame,text="–")
-    character.agility.grid(row=3,column=1,padx=5,pady=5)
+    loadout.character.hp = ttk.Label(stat_frame,text="–")
+    loadout.character.hp.grid(row=0,column=1,padx=5,pady=5)
+    loadout.character.strength = ttk.Label(stat_frame,text="–")
+    loadout.character.strength.grid(row=1,column=1,padx=5,pady=5)
+    loadout.character.ether = ttk.Label(stat_frame,text="–")
+    loadout.character.ether.grid(row=2,column=1,padx=5,pady=5)
+    loadout.character.agility = ttk.Label(stat_frame,text="–")
+    loadout.character.agility.grid(row=3,column=1,padx=5,pady=5)
 
     ttk.Separator(stat_frame,orient='horizontal').grid(row=4,column=0,columnspan=8,sticky='ew',padx=5,pady=5)
 
@@ -168,11 +176,55 @@ def build_ui(character, weapon, equips, p_defs, e_defs, weights):
     ttk.Label(stat_frame,text='E Def').grid(row=6, column=0, padx=5, pady=5)
     ttk.Label(stat_frame,text='Weight').grid(row=7, column=0, padx=5, pady=5)
 
-    character.p_def = ttk.Label(stat_frame, text="–")
-    character.p_def.grid(row=5, column=1, padx=5, pady=5)
-    character.e_def = ttk.Label(stat_frame, text="–")
-    character.e_def.grid(row=6, column=1, padx=5, pady=5)
-    character.weight = ttk.Label(stat_frame, text="–")
-    character.weight.grid(row=7, column=1, padx=5, pady=5)
+    loadout.character.p_def = ttk.Label(stat_frame, text="–")
+    loadout.character.p_def.grid(row=5, column=1, padx=5, pady=5)
+    loadout.character.e_def = ttk.Label(stat_frame, text="–")
+    loadout.character.e_def.grid(row=6, column=1, padx=5, pady=5)
+    loadout.character.weight = ttk.Label(stat_frame, text="–")
+    loadout.character.weight.grid(row=7, column=1, padx=5, pady=5)
+
+    ttk.Separator(stat_frame,orient='horizontal').grid(row=8,column=0,columnspan=8,sticky='ew',padx=5,pady=5)
+
+    ttk.Label(stat_frame,text='Auto Min').grid(row=9, column=0, padx=5, pady=5)
+    ttk.Label(stat_frame,text='Auto Max').grid(row=10, column=0, padx=5, pady=5)
+    ttk.Label(stat_frame,text='Crit').grid(row=11, column=0, padx=5, pady=5)
+    ttk.Label(stat_frame,text='Block').grid(row=12, column=0, padx=5, pady=5)
+
+    loadout.character.aa_min = ttk.Label(stat_frame, text="–")
+    loadout.character.aa_min.grid(row=9, column=1, padx=5, pady=5)
+    loadout.character.aa_max = ttk.Label(stat_frame, text="–")
+    loadout.character.aa_max.grid(row=10, column=1, padx=5, pady=5)
+    loadout.character.crit = ttk.Label(stat_frame, text="–")
+    loadout.character.crit.grid(row=11, column=1, padx=5, pady=5)
+    loadout.character.block = ttk.Label(stat_frame, text="–")
+    loadout.character.block.grid(row=12, column=1, padx=5, pady=5)
+    
+
+    # ---------
+    # GEM STATS
+    # ---------
+
+    gems_frame = tk.Frame(root,borderwidth=5,relief='groove')
+    gems_frame.grid(row=0, column=2, rowspan=2,padx=5,pady=5,sticky="N")
+
+    ttk.Label(gems_frame, text='Gem Effect').grid(row=0, column=0, padx=5, pady=5)
+    ttk.Label(gems_frame, text='Value').grid(row=0, column=1, padx=5, pady=5)
+
+    for i in range(8):
+        effect = ttk.Label(gems_frame, text="–")
+        effect.grid(row=1+i, column=0, padx=5, pady=5)
+        loadout.effects.append(effect)
+        gem_value = ttk.Label(gems_frame, text="–")
+        gem_value.grid(row=1+i, column=1, padx=5, pady=5)
+        loadout.gem_values.append(gem_value)
+
+    # ------------
+    # SKILLS FRAME
+    # ------------
+
+    #skills_frame = tk.Frame(root,borderwidth=5,relief='groove')
+    #skills_frame.grid(row=2, column=0, rowspan=2,padx=5,pady=5,sticky="N")
+
+
 
     return root

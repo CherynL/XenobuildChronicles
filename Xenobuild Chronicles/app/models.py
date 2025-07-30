@@ -5,9 +5,10 @@
 class Character():
 
     def __init__(self,
-                 name = None,  level = None,
-                 hp = None,    strength = None, ether = None, agility = None,
-                 p_def = None, e_def = None,    weight = None ):
+                 name = None, level = None,
+                 hp = None, strength = None, ether = None, agility = None,
+                 p_def = None, e_def = None, weight = None,
+                 aa_min = None, aa_max = None, crit = None, block = None):
         self.name = name
         self.level = level
         # -------------
@@ -19,6 +20,11 @@ class Character():
         self.p_def = p_def
         self.e_def = e_def
         self.weight = weight
+        # -------------
+        self.aa_min = aa_min
+        self.aa_max = aa_max
+        self.crit = crit
+        self.block = block
     
 
 # Gem Class
@@ -44,7 +50,7 @@ class Weapon():
         self.crit = crit
         self.p_def = p_def
         self.e_def = e_def
-        self.block = block  
+        self.block = block
         self.gem0 = Gem(gem0)
         self.gem1 = Gem(gem1)
         self.gem2 = Gem(gem2)
@@ -63,3 +69,17 @@ class Equipment:
         self.e_def = e_def
         self.weight = weight
         self.gem = Gem(gem)
+
+
+class Loadout:
+
+    def __init__ (self,
+                  character = None,
+                  weapon = None,
+                  head = Equipment(), torso = Equipment(), arm = Equipment(), leg = Equipment(), foot = Equipment()):
+        self.character = Character(character)
+        self.weapon = Weapon(weapon)
+        self.equips = [head, torso, arm, leg, foot]
+        self.gems = [self.weapon.gem0, self.weapon.gem1, self.weapon.gem2, head.gem, torso.gem, arm.gem, leg.gem, foot.gem]
+        self.effects = []
+        self.gem_values = []

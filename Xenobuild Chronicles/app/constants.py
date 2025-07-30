@@ -1,5 +1,5 @@
 # Excel File Path
-XENOBUILD_DATA = 'assets\\Xenobuild.v4.xlsx'
+XENOBUILD_DATA = 'assets\\Xenobuild.v5.xlsx'
 
 # Sheet Names
 HEAD_EQUIP = "Head_Equip"
@@ -12,6 +12,9 @@ GEMS_UNLINKED = "Gems_Unlinked"     # Unlinked, manually edited
 GEMS_BY_RANK = "Gems_ByRank"
 GEMS_BESTEST = "Gems_Bestest"       # Only Rank VI gems
 WEAPONS_UNLINKED = "Weapons_Unlinked"
+
+SKILLS_FULL = "Skills_Full"
+LINKS_BY_CHARACTER = "Links_ByCharacter"
 
 # Gem Options
 GEM_OPTIONS = ['Bestest', 'Best', 'Full', 'Worst', 'Worstest']
